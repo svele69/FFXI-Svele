@@ -107,7 +107,7 @@ function Engine()
         windower.send_command("input /attack")
         
     elseif not (t == '' or t == nil) and current_time > tickdelay then
-        if player.status == 1 and  t.distance:sqrt() > 3.74 then
+        if player.status == 1 and  t.distance:sqrt() > 3.85 then
             windower.send_command("input /attack")
         end
     end
