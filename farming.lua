@@ -101,7 +101,9 @@ function Engine()
     if player.status == 0 and not (windower.ffxi.get_mob_by_target('t') == '' or windower.ffxi.get_mob_by_target('t') == nil) then
         if t.distance:sqrt() > 4 and settings.pull == true and settings.debuff == "range" then
             windower.send_command("ra")
-        elseif t.distance:sqrt() > 4 and settings.pull == true and not settings.debuff == "range" then
+        elseif (t.distance:sqrt() > 4 and t.distance:sqrt() < 17.8) and settings.pull == true and settings.debuff == "provoke" then
+            windower.send_command("provoke")
+        elseif t.distance:sqrt() > 4 and settings.pull == true and not (settings.debuff == "range" or "provoke") then
             windower.send_command("input /ma " .. settings.debuff)
         end
         windower.send_command("input /attack")

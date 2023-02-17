@@ -7,9 +7,9 @@
         <sets>
 
         </sets>
-        <targets />
+        <targets>locus bight rarab</targets>
     </global>
     <sveleh>
-        <targets>locus bight rarab</targets>
+        <targets>locus bight rarab,locus ghost crab</targets>
     </sveleh>
 </settings>
