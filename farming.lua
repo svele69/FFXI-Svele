@@ -102,7 +102,7 @@ function Engine()
         if t.distance:sqrt() > 4 and settings.pull == true and settings.spell == "range" then
             windower.send_command("/ra")
         elseif (t.distance:sqrt() > 4 and t.distance:sqrt() < 17.8) and settings.pull == true and settings.spell == "provoke" then
-            windower.send_command("/ja provoke")
+            windower.send_command("provoke")
         elseif t.distance:sqrt() > 4 and settings.pull == true and not (settings.spell == "range" or "provoke") then
             windower.send_command("input /ma " .. settings.spell)
         end
