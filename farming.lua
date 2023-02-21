@@ -26,10 +26,10 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ]]
 
-_addon.name = 'FarmCP'
+_addon.name = 'Farming'
 _addon.author = 'SveLe'
 _addon.version = '15.02.2023.02 (Beta)'
-_addon.command = 'farmcp'
+_addon.command = 'farming'
 
 config = require('config')
 packets = require('packets')
@@ -44,9 +44,9 @@ Action_Delay = 3
 buffactive = {}
 
 defaults = {}
-defaults.autotarget = false
+defaults.autotarget = true
 defaults.targets = S{}
-defaults.debuff = ""
+defaults.spell = ""
 defaults.pull = false
 
 tickdelay = os.clock() + 5
@@ -56,7 +56,7 @@ settings = config.load({
     add_to_chat_mode = 8,
     sets = {},
     pull = false,
-    debuff = "",
+    spell = "",
 })
 
 windower.register_event('incoming chunk', function(id, data)
@@ -99,12 +99,12 @@ function Engine()
     --windower.add_to_chat(settings.add_to_chat_mode, current_time .. ' current_time')
 
     if player.status == 0 and not (windower.ffxi.get_mob_by_target('t') == '' or windower.ffxi.get_mob_by_target('t') == nil) then
-        if t.distance:sqrt() > 4 and settings.pull == true and settings.debuff == "range" then
-            windower.send_command("ra")
-        elseif (t.distance:sqrt() > 4 and t.distance:sqrt() < 17.8) and settings.pull == true and settings.debuff == "provoke" then
-            windower.send_command("provoke")
-        elseif t.distance:sqrt() > 4 and settings.pull == true and not (settings.debuff == "range" or "provoke") then
-            windower.send_command("input /ma " .. settings.debuff)
+        if t.distance:sqrt() > 4 and settings.pull == true and settings.spell == "range" then
+            windower.send_command("/ra")
+        elseif (t.distance:sqrt() > 4 and t.distance:sqrt() < 17.8) and settings.pull == true and settings.spell == "provoke" then
+            windower.send_command("/ja provoke")
+        elseif t.distance:sqrt() > 4 and settings.pull == true and not (settings.spell == "range" or "provoke") then
+            windower.send_command("input /ma " .. settings.spell)
         end
         windower.send_command("input /attack")
         
@@ -115,7 +115,7 @@ function Engine()
     end
     
     if player.status == 1 and not (windower.ffxi.get_mob_by_target('t') == '' or windower.ffxi.get_mob_by_target('t') == nil) then
-            TurnToTarget()
+        TurnToTarget()
     end
 
 	if Start_Engine then
@@ -192,7 +192,7 @@ commands = {}
 
 commands.save = function(set_name)
     if not set_name then
-        windower.add_to_chat(11, 'A saved target set needs a name: //farmcp save <set>')
+        windower.add_to_chat(11, 'A saved target set needs a name: //farming save <set>')
         return
     end
 
@@ -203,7 +203,7 @@ end
 
 commands.load = function(set_name)
     if not set_name or not settings.sets[set_name] then
-        windower.add_to_chat(11, 'Unknown target set: //farmcp load <set>')
+        windower.add_to_chat(11, 'Unknown target set: //farming load <set>')
         return
     end
 
@@ -249,14 +249,14 @@ end
 commands.l = commands.list
 
 commands.start = function()
-    windower.add_to_chat(2,"....Starting CP-Farm Helper....")
+    windower.add_to_chat(2,"....Starting Farming Helper....")
     Start_Engine = true
     Engine()
 end
 commands.s = commands.start
 
 commands.halt = function()
-    windower.add_to_chat(2,"....Stopping CP-Farm Helper....")
+    windower.add_to_chat(2,"....Stopping Farming Helper....")
 		Start_Engine = false
     end
 commands.h = commands.halt
@@ -285,7 +285,7 @@ commands.r = commands.remove
 
 commands.spell = function(str)
     if L{"dia","bio","provoke","flash","hj","fq","range"}:contains(str) then
-        settings.debuff = str
+        settings.spell = str
         windower.add_to_chat(settings.add_to_chat_mode, ("Using pull : %s"):format(str))
     else
         windower.add_to_chat(settings.add_to_chat_mode,"Please specify one of the valid augmenting styles: [Range,Dia,Bio,Flash,Provoke,hj(Hojo:Ni)],fq(Foe requiem VII)")
@@ -312,7 +312,7 @@ commands.p = commands.pull
 
 commands.show = function()
     windower.add_to_chat(11,"Autotarget: "..tostring(settings.autotarget))
-	windower.add_to_chat(11,"Debuff: "..settings.debuff)
+	windower.add_to_chat(11,"Spell: "..settings.spell)
 	windower.add_to_chat(11,"Pull Mode "..tostring(settings.pull))
 	windower.add_to_chat(11,"Target(s): "..settings.targets:tostring())
 end
@@ -320,16 +320,16 @@ end
 
 
 commands.help = function()
-    windower.add_to_chat(11, 'Farm CP:')
-    windower.add_to_chat(11, '  //farmcp add <target name> - add a target to the list')
-    windower.add_to_chat(11, '  //farmcp remove <target name> - remove a target from the list')
-    windower.add_to_chat(11, '  //farmcp pull true/false - Pullmode on or off')
-    windower.add_to_chat(11, '  //farmcp spell - Dia / Provoke / ...')
-    windower.add_to_chat(11, '  //farmcp start - target the nearest target from the list')
-    windower.add_to_chat(11, '  //farmcp save <set> - save current targets as a target set')
-    windower.add_to_chat(11, '  //farmcp load <set> - load a previously saved target set')
-    windower.add_to_chat(11, '  //farmcp list - list current targets')
-    windower.add_to_chat(11, '  //farmcp help - display this help')
+    windower.add_to_chat(11, 'Farming:')
+    windower.add_to_chat(11, '  //farming add <target name> - add a target to the list')
+    windower.add_to_chat(11, '  //farming remove <target name> - remove a target from the list')
+    windower.add_to_chat(11, '  //farming pull true/false - Pullmode on or off')
+    windower.add_to_chat(11, '  //farming spell - Dia / Provoke / ...')
+    windower.add_to_chat(11, '  //farming start - target the nearest target from the list')
+    windower.add_to_chat(11, '  //farming save <set> - save current targets as a target set')
+    windower.add_to_chat(11, '  //farming load <set> - load a previously saved target set')
+    windower.add_to_chat(11, '  //farming list - list current targets')
+    windower.add_to_chat(11, '  //farming help - display this help')
     windower.add_to_chat(11, '(For more detailed information, see the readme)')
 end
 
