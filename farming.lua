@@ -28,7 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 _addon.name = 'Farming'
 _addon.author = 'SveLe'
-_addon.version = '15.02.2023.02 (Beta)'
+_addon.version = '15.02.2023.03 (Beta)'
 _addon.command = 'farming'
 
 config = require('config')
@@ -192,7 +192,7 @@ commands = {}
 
 commands.save = function(set_name)
     if not set_name then
-        windower.add_to_chat(11, 'A saved target set needs a name: //farming save <set>')
+        windower.add_to_chat(settings.add_to_chat_mode,'A saved target set needs a name: //farming save <set>')
         return
     end
 
@@ -203,13 +203,13 @@ end
 
 commands.load = function(set_name)
     if not set_name or not settings.sets[set_name] then
-        windower.add_to_chat(11, 'Unknown target set: //farming load <set>')
+        windower.add_to_chat(settings.add_to_chat_mode,'Unknown target set: //farming load <set>')
         return
     end
 
     settings.targets = L{settings.sets[set_name]:unpack()}
     settings:save()
-    windower.add_to_chat(11, set_name .. ' target set loaded')
+    windower.add_to_chat(settings.add_to_chat_mode, set_name .. ' target set loaded')
 end
 
 
@@ -237,13 +237,13 @@ commands.a = commands.add
 
 commands.list = function()
     if settings.targetd == 0 then
-        windower.add_to_chat(11, 'There are no targets set')
+        windower.add_to_chat(settings.add_to_chat_mode, 'There are no targets set')
         return
     end
 
-    windower.add_to_chat(11, 'Targets:')
+    windower.add_to_chat(settings.add_to_chat_mode,'Targets:')
     for _, target in ipairs(settings.targets) do
-        windower.add_to_chat(11, '  ' .. target)
+        windower.add_to_chat(settings.add_to_chat_mode, '  ' .. target)
     end
 end
 commands.l = commands.list
@@ -298,10 +298,10 @@ commands.pull = function(bool)
     if bool then
         if L{"true","t","yes","y"}:contains(bool) then
             settings.pull = true
-            windower.add_to_chat(11, 'Pull Mode enabled')
+            windower.add_to_chat(settings.add_to_chat_mode, 'Pull Mode enabled')
         elseif L{"false","f","no","n"}:contains(bool) then
             settings.pull = false
-            windower.add_to_chat(11, 'Pull Mode disabled')
+            windower.add_to_chat(settings.add_to_chat_mode, 'Pull Mode disabled')
         end
     else
         settings.pellucid = not settings.pellucid
@@ -311,26 +311,26 @@ commands.p = commands.pull
 
 
 commands.show = function()
-    windower.add_to_chat(11,"Autotarget: "..tostring(settings.autotarget))
-	windower.add_to_chat(11,"Spell: "..settings.spell)
-	windower.add_to_chat(11,"Pull Mode "..tostring(settings.pull))
-	windower.add_to_chat(11,"Target(s): "..settings.targets:tostring())
+    windower.add_to_chat(settings.add_to_chat_mode,"Autotarget: "..tostring(settings.autotarget))
+	windower.add_to_chat(settings.add_to_chat_mode,"Spell: "..settings.spell)
+	windower.add_to_chat(settings.add_to_chat_mode,"Pull Mode "..tostring(settings.pull))
+	windower.add_to_chat(settings.add_to_chat_mode,"Target(s): "..settings.targets:tostring())
 end
 
 
 
 commands.help = function()
-    windower.add_to_chat(11, 'Farming:')
-    windower.add_to_chat(11, '  //farming add <target name> - add a target to the list')
-    windower.add_to_chat(11, '  //farming remove <target name> - remove a target from the list')
-    windower.add_to_chat(11, '  //farming pull true/false - Pullmode on or off')
-    windower.add_to_chat(11, '  //farming spell - Dia / Provoke / ...')
-    windower.add_to_chat(11, '  //farming start - target the nearest target from the list')
-    windower.add_to_chat(11, '  //farming save <set> - save current targets as a target set')
-    windower.add_to_chat(11, '  //farming load <set> - load a previously saved target set')
-    windower.add_to_chat(11, '  //farming list - list current targets')
-    windower.add_to_chat(11, '  //farming help - display this help')
-    windower.add_to_chat(11, '(For more detailed information, see the readme)')
+    windower.add_to_chat(settings.add_to_chat_mode, 'Farming:')
+    windower.add_to_chat(settings.add_to_chat_mode, '  //farming add <target name> - add a target to the list')
+    windower.add_to_chat(settings.add_to_chat_mode, '  //farming remove <target name> - remove a target from the list')
+    windower.add_to_chat(settings.add_to_chat_mode,'  //farming pull true/false - Pullmode on or off')
+    windower.add_to_chat(settings.add_to_chat_mode, '  //farming spell - Dia / Provoke / ...')
+    windower.add_to_chat(settings.add_to_chat_mode, '  //farming start - target the nearest target from the list')
+    windower.add_to_chat(settings.add_to_chat_mode, '  //farming save <set> - save current targets as a target set')
+    windower.add_to_chat(settings.add_to_chat_mode, '  //farming load <set> - load a previously saved target set')
+    windower.add_to_chat(settings.add_to_chat_mode, '  //farming list - list current targets')
+    windower.add_to_chat(settings.add_to_chat_mode, '  //farming help - display this help')
+    windower.add_to_chat(settings.add_to_chat_mode, '(For more detailed information, see the readme)')
 end
 
 
